@@ -31,9 +31,11 @@ namespace csharp_asp_net_core_mvc_housing_queue
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<Models.ApplicationUser>(
+                options => options.SignIn.RequireConfirmedAccount = false
+                )
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
            services.AddRazorPages();
         }
 
@@ -43,7 +45,6 @@ namespace csharp_asp_net_core_mvc_housing_queue
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {

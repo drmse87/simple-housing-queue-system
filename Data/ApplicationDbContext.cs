@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace csharp_asp_net_core_mvc_housing_queue.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<Models.ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
