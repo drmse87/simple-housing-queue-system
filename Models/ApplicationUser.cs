@@ -7,7 +7,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
     {
         public ApplicationUser()
         {
-            RegistrationDate = DateTime.Today;
+            RegistrationDate = DateTime.Now;
         }
 
         [PersonalData]

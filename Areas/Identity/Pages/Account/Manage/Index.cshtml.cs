@@ -26,7 +26,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
         public string Username { get; set; }
         
         [Display(Name = "Registration date")]
-        public DateTime RegistrationDate { get; set; }
+        public string RegistrationDate { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -48,7 +48,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
 
             Username = userName;
 
-            RegistrationDate = user.RegistrationDate;
+            RegistrationDate = user.RegistrationDate.ToShortDateString();
 
             Input = new InputModel
             {

@@ -34,6 +34,7 @@ namespace csharp_asp_net_core_mvc_housing_queue
             services.AddDefaultIdentity<Models.ApplicationUser>(
                 options => options.SignIn.RequireConfirmedAccount = false
                 )
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
            services.AddRazorPages();
@@ -72,6 +73,7 @@ namespace csharp_asp_net_core_mvc_housing_queue
         private string CreateConnectionString()
         {
             var builder = new SqlConnectionStringBuilder();
+    
             builder.DataSource = Configuration["HousingQueue:Host"];
             builder.UserID = Configuration["HousingQueue:User"];
             builder.Password = Configuration["HousingQueue:Password"];
