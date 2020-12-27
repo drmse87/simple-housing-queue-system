@@ -1,12 +1,12 @@
 # Simple housing queue system (bostadskö)
 ## Technical details
- Built with ASP .NET Core 5.0 (MVC), Identity, Entity Framework and Microsoft SQL Server.
+ Built with ASP .NET Core 5.0 (MVC), Identity, Entity Framework and Microsoft SQL Server Web (64-bit) 15.0.4003.23.
 
 ## Goal
 The idea here is to develop a simple housing queue system. The end-users would be anyone
 trying to find an apartment in the city where the housing service is operating.
 
-## Key concepts
+## Key concepts (entities)
 ### Rental objects
 The objects (apartments) that can be rented.
 ### Property
@@ -38,7 +38,7 @@ Admins should be able to:
 * Add new apartments (to existing properties, located in existing areas)
 * Give contracts to the applicant (automatically selected, with the longest waiting time)
 * List all active contracts
-* ...plus more for a future date (add new properties to existing areas, add new areas, terminating contracts i.e. evicting tenants, send invoice to all active contracts and more)
+* ...plus more for a future date (add new properties to existing areas, add new areas, terminating contracts i.e. evicting tenants, send invoice to tentants (with active contracts))
 
 ## Data
 The DBMS used will be Microsoft SQL Server Web (64-bit) 15.0.4003.23.
@@ -66,7 +66,9 @@ Preliminarily, the following tables and columns will be used:
 ## Development details
 ### To do list
 #### Implementation
+* ~~Connect to SQL server using ASP.NET Core Secret Manager tool and SqlConnectionStringBuilder class~~
 * ~~Add authentication/authorization/Identity~~
+* ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
 * Add all entities and migrate them
 * Add bundling/minification?
 
@@ -87,5 +89,23 @@ var blogs = context.Blogs
     .ToList();
 ```
 ### Migrations
+EF Core migrations are run like so:
+
 `dotnet ef migrations add InitialCreate`  
 `dotnet ef database update`
+
+### Identity roles
+Instead of creating a RoleController or something similar, an "Admin" role was simply added like so:
+
+`
+var role = new IdentityRole();
+            role.Name = "Admin";
+            await _roleManager.CreateAsync(role);
+`
+
+
+
+### dotnet new template
+MVC template with Individual User Accounts was used:
+
+`dotnet new mvc -au Individual`
