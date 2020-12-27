@@ -13,6 +13,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
         {
         }
 
-        public DbSet<Models.Appartment> Appartments { get; set; }
+        public DbSet<Models.RentalObject> RentalObjects { get; set; }
     }
 }

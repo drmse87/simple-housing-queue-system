@@ -64,6 +64,10 @@ namespace csharp_asp_net_core_mvc_housing_queue
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "listings",
+                    pattern: "listings/{id}",
+                    defaults: new { controller = "Listings", action = "Details" });
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
