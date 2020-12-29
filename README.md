@@ -58,10 +58,10 @@ Preliminarily, the following tables and columns will be used:
 * Contracts(ContractID [PKEY], UserID [FKEY], RentalObjectID [FKEY], StartDate, EndDate)
 
 ### EF diagram
-![EF Diagram](ef-diagram-housing-queue.png "EF Diagram")
+![EF Diagram](Docs/ef-diagram-housing-queue.png "EF Diagram")
 
 ### SQL diagram
-![SQL Diagram](sql-diagram-housing-queue.png "EF Diagram")
+![SQL Diagram](Docs/sql-diagram-housing-queue.png "EF Diagram")
 
 ## Development details
 ### To do list
