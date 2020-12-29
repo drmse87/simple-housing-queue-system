@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp_asp_net_core_mvc_housing_queue.Data;
 
 namespace csharp_asp_net_core_mvc_housing_queue.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201228233327_AllRemainingEntities")]
+    partial class AllRemainingEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,33 +156,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Application", b =>
-                {
-                    b.Property<string>("ApplicationID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ApplicationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ListingID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("QueueTime")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ApplicationID");
-
-                    b.HasIndex("ListingID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Applications");
-                });
-
             modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -249,91 +224,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Area", b =>
-                {
-                    b.Property<string>("AreaID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AreaID");
-
-                    b.ToTable("Areas");
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Contract", b =>
-                {
-                    b.Property<string>("ContractID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RentalObjectID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ContractID");
-
-                    b.HasIndex("RentalObjectID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Contracts");
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Listing", b =>
-                {
-                    b.Property<string>("ListingID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("LastApplicationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("PublishDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RentalObjectID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ListingID");
-
-                    b.HasIndex("RentalObjectID");
-
-                    b.ToTable("Listings");
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Property", b =>
-                {
-                    b.Property<string>("PropertyID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AreaID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PropertyID");
-
-                    b.HasIndex("AreaID");
-
-                    b.ToTable("Properties");
-                });
-
             modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.RentalObject", b =>
                 {
                     b.Property<string>("RentalObjectID")
@@ -344,14 +234,12 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PropertyID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Rent")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("RentalObjectID");
-
-                    b.HasIndex("PropertyID");
 
                     b.ToTable("RentalObjects");
                 });
@@ -405,63 +293,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Application", b =>
-                {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.Listing", "Listing")
-                        .WithMany()
-                        .HasForeignKey("ListingID");
-
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Listing");
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Contract", b =>
-                {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.RentalObject", "RentalObject")
-                        .WithMany()
-                        .HasForeignKey("RentalObjectID");
-
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("RentalObject");
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Listing", b =>
-                {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.RentalObject", "RentalObject")
-                        .WithMany()
-                        .HasForeignKey("RentalObjectID");
-
-                    b.Navigation("RentalObject");
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Property", b =>
-                {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.Area", "Area")
-                        .WithMany()
-                        .HasForeignKey("AreaID");
-
-                    b.Navigation("Area");
-                });
-
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.RentalObject", b =>
-                {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.Property", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyID");
-
-                    b.Navigation("Property");
                 });
 #pragma warning restore 612, 618
         }

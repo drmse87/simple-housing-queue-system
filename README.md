@@ -7,61 +7,61 @@ The idea here is to develop a simple housing queue system. The end-users would b
 trying to find an apartment in the city where the housing service is operating.
 
 ## Key concepts (entities)
-### Rental objects
-The objects (apartments) that can be rented.
+### Rental object
+The object (apartment) that can be rented.
 ### Property
 The property the apartment is located in.
 ### Area
 The area the property is located in.
-### Listings
-Whenever an apartment is free, there is a listing which contains information related to the apartment and the area it is located in and also when the
-application time expires. 
+### Listing
+Whenever an apartment is free, there is a listing which contains information about the apartment, the day the listing was puiblished and when the application time expires. 
 ### Application
-An application for the apartment (or more specifically the listing) contains information about the listing, the applicant and the
-applicant’s number of waiting days (effectively be the waiting list). 
-
-### Contracts
+Users can apply for apartments (or more specifically the listing). Applications contains information about the listing, the applicant and the
+applicant’s number of waiting days (this will effectively be the waiting list). 
+### Contract
 The applicant with the
-longest waiting time is awarded a contract, containing information about the applicant, the
-apartment and the start date. An applicant can ever only have one active contract.
+longest waiting time is awarded a contract, with a start and end date. An applicant can only have one active contract.
 
 ## Roles
-### Applicants 
-Applicants should be able to:
+### Users (Applicants) 
+Users should be able to:
 * Register in the housing queue
 * View apartment listings
-* Apply for free apartments
-* ...plus more for a future date
+* Apply for apartments
+* ...plus more (for a future date)
 
 ### Admins
 Admins should be able to:
 * Add new apartments (to existing properties, located in existing areas)
 * Give contracts to the applicant (automatically selected, with the longest waiting time)
 * List all active contracts
-* ...plus more for a future date (add new properties to existing areas, add new areas, terminating contracts i.e. evicting tenants, send invoice to tentants (with active contracts))
+* ...plus more (for a future date, such as possibility to add new properties to existing areas, add new areas, terminating contracts i.e. evicting tenants, invoice management)
 
 ## Data
-The DBMS used will be Microsoft SQL Server Web (64-bit) 15.0.4003.23.
+Microsoft SQL Server Web (64-bit) 15.0.4003.23 will be used as DBMS.
 
 Preliminarily, the following tables and columns will be used:
 
 ### Schemas
-* RentalObjects(RentalObjectID [PKEY], PropertyID [FKEY], Rent)
+* RentalObjects(RentalObjectID [PKEY], PropertyID [FKEY], FloorPlanUrl, Rent)
 
-* Properties(PropertyID [PKEY], AreaID [FKEY], StreetAddress, PropertyDescription)
+* Properties(PropertyID [PKEY], AreaID [FKEY], StreetAddress, Description)
 
 * Areas(AreaID [PKEY], AreaDescription)
 
-* Listings(ListingID [PKEY], ApartmentID [FKEY])
+* Listings(ListingID [PKEY], RentalObjectID [FKEY], PublishDate, LastApplicationDate)
 
-* Applicants(ApplicantID [PKEY], FirstName, LastName, Email, Phone, RegistrationDate)
+* Users(UserID [PKEY], FirstName, LastName, Email, Phone, RegistrationDate)
 
-* Applications(ApplicationID [PKEY], ApplicantID [FKEY], ListingID [FKEY], QueueTime)
+* Applications(ApplicationID [PKEY], UserID [FKEY], ListingID [FKEY], QueueTime, ApplicationDate)
 
-* Contracts(ContractID [PKEY], ApplicantID [FKEY], RentalObjectID [FKEY], StartDate, EndDate)
+* Contracts(ContractID [PKEY], UserID [FKEY], RentalObjectID [FKEY], StartDate, EndDate)
 
 ### EF diagram
-![alt text](ef-diagram-housing-queue.png "EF Diagram")
+![EF Diagram](ef-diagram-housing-queue.png "EF Diagram")
+
+### SQL diagram
+![SQL Diagram](sql-diagram-housing-queue.png "EF Diagram")
 
 ## Development details
 ### To do list
@@ -69,7 +69,7 @@ Preliminarily, the following tables and columns will be used:
 * ~~Connect to SQL server using ASP.NET Core Secret Manager tool and SqlConnectionStringBuilder class~~
 * ~~Add authentication/authorization/Identity~~
 * ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
-* Add all entities and migrate them
+* ~~Add all entities and migrate them~~
 * Add bundling/minification?
 
 #### Requirements
@@ -81,7 +81,7 @@ Preliminarily, the following tables and columns will be used:
 * Admin: List all active contracts
 
 ### Raw SQL queries
-For this assignment, raw SQL queries will be used instead of LINQ:
+Raw SQL queries will be used instead of LINQ (assignment rules):
 
 ```
 var blogs = context.Blogs
@@ -89,13 +89,13 @@ var blogs = context.Blogs
     .ToList();
 ```
 ### Migrations
-EF Core migrations are run like so:
+EF Core migrations:
 
 `dotnet ef migrations add InitialCreate`  
 `dotnet ef database update`
 
 ### Identity roles
-Instead of creating a RoleController or something similar, an "Admin" role was simply added like so:
+Instead of creating a RoleController or something similar, an "Admin" role was simply manually added like so:
 
 `
 var role = new IdentityRole();
@@ -103,9 +103,7 @@ var role = new IdentityRole();
             await _roleManager.CreateAsync(role);
 `
 
-
-
-### dotnet new template
+### dotnet template
 MVC template with Individual User Accounts was used:
 
 `dotnet new mvc -au Individual`

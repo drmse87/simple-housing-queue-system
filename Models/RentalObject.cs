@@ -8,5 +8,13 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string RentalObjectID { get; set; }
+
+        [ForeignKey("Property")]
+        public string PropertyID { get; set; }
+        public Property Property { get; set; }
+
+        public string FloorPlanUrl { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Rent { get; set; }
     }
 }

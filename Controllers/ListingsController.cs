@@ -23,7 +23,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             // await _context.AddAsync(new RentalObject());
             // await _context.SaveChangesAsync();
