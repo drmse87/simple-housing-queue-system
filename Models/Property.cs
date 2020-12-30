@@ -12,7 +12,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
         [ForeignKey("Area")]
         public string AreaID { get; set; }
         public Area Area { get; set; }
-
+        public string PropertyPhotoUrl { get; set; }
         public string StreetAddress { get; set; }
         public string Description { get; set; }
     }

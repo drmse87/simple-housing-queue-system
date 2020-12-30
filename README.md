@@ -8,23 +8,23 @@ trying to find an apartment in the city where the housing service is operating.
 
 ## Key concepts (entities)
 ### Rental object
-The object (apartment) that can be rented.
+The object that can be rented (can either be an apartment or a parking spot).
 ### Property
-The property the apartment is located in.
+The property the rental object is located in or at.
 ### Area
 The area the property is located in.
 ### Listing
-Whenever an apartment is free, there is a listing which contains information about the apartment, the day the listing was puiblished and when the application time expires. 
+Whenever a rental object is free, there is a listing which contains information about the apartment, the day the listing was puiblished and when the application time expires. 
 ### Application
-Users can apply for apartments (or more specifically the listing). Applications contains information about the listing, the applicant and the
+Users can apply for rental objects (or more specifically the listing). Applications store a reference to the listing and applicant and most importantly, the
 applicant’s number of waiting days (this will effectively be the waiting list). 
 ### Contract
 The applicant with the
 longest waiting time is awarded a contract, with a start and end date. An applicant can only have one active contract.
 
 ## Roles
-### Users (Applicants) 
-Users should be able to:
+### Applicants
+Applicants should be able to:
 * Register in the housing queue
 * View apartment listings
 * Apply for apartments
@@ -43,15 +43,15 @@ Microsoft SQL Server Web (64-bit) 15.0.4003.23 will be used as DBMS.
 Preliminarily, the following tables and columns will be used:
 
 ### Schemas
-* RentalObjects(RentalObjectID [PKEY], PropertyID [FKEY], FloorPlanUrl, Rent)
+* RentalObjects(RentalObjectID [PKEY], PropertyID§ [FKEY], FloorPlanUrl, Rent, Size, Rooms, Floor, ParkingSpotNumber)
 
 * Properties(PropertyID [PKEY], AreaID [FKEY], StreetAddress, Description)
 
 * Areas(AreaID [PKEY], AreaDescription)
 
-* Listings(ListingID [PKEY], RentalObjectID [FKEY], PublishDate, LastApplicationDate)
+* Listings(ListingID [PKEY], RentalObjectID [FKEY], PublishDate, LastApplicationDate, MoveInDate)
 
-* Users(UserID [PKEY], FirstName, LastName, Email, Phone, RegistrationDate)
+* Applicants(UserID [PKEY], FirstName, LastName, Email, Phone, RegistrationDate)
 
 * Applications(ApplicationID [PKEY], UserID [FKEY], ListingID [FKEY], QueueTime, ApplicationDate)
 
@@ -68,15 +68,17 @@ Preliminarily, the following tables and columns will be used:
 #### Implementation
 * ~~Connect to SQL server using ASP.NET Core Secret Manager tool and SqlConnectionStringBuilder class~~
 * ~~Add authentication/authorization/Identity~~
+* ~~Add custom user data such as registration date to Identity model (https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0)~~
 * ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
 * ~~Add all entities and migrate them~~
 * Add bundling/minification?
+* Add Rent, Url, Address, Description, ApartmentSize types
 
 #### Requirements
 * ~~Applicant: Register in the housing queue~~ 
 * ~~Applicant: Display available listings~~
 * Applicant: Apply for apartments
-* Admin: Add new apartments to existing properties
+* Admin: Add new rental objects to existing properties
 * Admin: Award contracts to the applicant with the longest waiting time
 * Admin: List all active contracts
 

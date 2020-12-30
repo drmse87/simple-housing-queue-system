@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp_asp_net_core_mvc_housing_queue.Data;
 
 namespace csharp_asp_net_core_mvc_housing_queue.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201230201444_ExposingApartmentsParkingSpots")]
+    partial class ExposingApartmentsParkingSpots
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,9 +329,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PropertyPhotoUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -346,15 +345,15 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PropertyID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Rent")
                         .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("RentalObjectType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RentalObjectID");
 
@@ -362,7 +361,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
 
                     b.ToTable("RentalObjects");
 
-                    b.HasDiscriminator<string>("RentalObjectType").HasValue("RentalObject");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("RentalObject");
                 });
 
             modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Apartment", b =>
@@ -391,7 +390,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.Property<int>("ParkingSpotNumber")
                         .HasColumnType("int");
 
-                    b.HasDiscriminator().HasValue("Parking spot");
+                    b.HasDiscriminator().HasValue("ParkingSpot");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
