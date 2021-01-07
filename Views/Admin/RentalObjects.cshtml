@@ -1,0 +1,19 @@
+@model RentalObjectsViewModel
+@{
+    ViewData["Title"] = "All rental objects without contract";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<partial name="_InfoMessage">
+
+<div class="text-center">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <ul>
+        @foreach (var item in Model.RentalObjects)
+        {
+            <li>@item.RentalObjectID</li>
+        }
+        </ul>
+</div>

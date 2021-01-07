@@ -18,7 +18,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
         public string ListingID { get; set; }
         public Listing Listing { get; set; }
 
-        public int QueueTime { get; set; }
         public DateTime ApplicationDate { get; set; }
     }
 }

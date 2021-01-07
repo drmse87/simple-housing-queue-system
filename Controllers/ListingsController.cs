@@ -25,9 +25,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
 
         public IActionResult Index()
         {
-            // await _context.AddAsync(new RentalObject());
-            // await _context.SaveChangesAsync();
-
             return View();
         }
 

@@ -2,7 +2,15 @@
     ViewData["Title"] = "Admin";
 }
 
+<h1>@ViewData["Title"]</h1>
+
+<partial name="_InfoMessage">
+
 <div class="text-center">
-    <h1 class="display-4">Admin</h1>
-    <p></p>
+    <p>
+        <ul>
+            <li><a asp-action="NewArea">Add new area</a></li>
+            <li><a asp-action="RentalObjects">See all rental objects</a></li>
+        </ul>
+    </p>
 </div>

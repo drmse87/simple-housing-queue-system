@@ -3,7 +3,7 @@
  Built with ASP .NET Core 5.0 (MVC), Identity, Entity Framework and Microsoft SQL Server Web (64-bit) 15.0.4003.23.
 
 ## Goal
-The idea here is to develop a simple housing queue system. The end-users would be anyone
+The goal here is to develop a simple housing queue system. The end-users would be anyone
 trying to find an apartment in the city where the housing service is operating.
 
 ## Key concepts (entities)
@@ -43,7 +43,7 @@ Microsoft SQL Server Web (64-bit) 15.0.4003.23 will be used as DBMS.
 Preliminarily, the following tables and columns will be used:
 
 ### Schemas
-* RentalObjects(RentalObjectID [PKEY], PropertyID§ [FKEY], FloorPlanUrl, Rent, Size, Rooms, Floor, ParkingSpotNumber)
+* RentalObjects(RentalObjectID [PKEY], PropertyID [FKEY], FloorPlanUrl, Rent, Size, Rooms, Floor, ParkingSpotNumber)
 
 * Properties(PropertyID [PKEY], AreaID [FKEY], StreetAddress, Description)
 
@@ -51,14 +51,14 @@ Preliminarily, the following tables and columns will be used:
 
 * Listings(ListingID [PKEY], RentalObjectID [FKEY], PublishDate, LastApplicationDate, MoveInDate)
 
-* Applicants(UserID [PKEY], FirstName, LastName, Email, Phone, RegistrationDate)
+* Applicants(UserID [PKEY], FirstName, LastName, Email, Phone, RegistrationDate, StreetAddress)
 
-* Applications(ApplicationID [PKEY], UserID [FKEY], ListingID [FKEY], QueueTime, ApplicationDate)
+* Applications(ApplicationID [PKEY], UserID [FKEY], ListingID [FKEY], ApplicationDate)
 
 * Contracts(ContractID [PKEY], UserID [FKEY], RentalObjectID [FKEY], StartDate, EndDate)
 
-### EF diagram
-![EF Diagram](Docs/ef-diagram-housing-queue.png "EF Diagram")
+### E/R diagram
+![E/R Diagram](Docs/er-diagram-housing-queue.png "EF Diagram")
 
 ### SQL diagram
 ![SQL Diagram](Docs/sql-diagram-housing-queue.png "EF Diagram")
@@ -78,7 +78,6 @@ Preliminarily, the following tables and columns will be used:
 * ~~Applicant: Register in the housing queue~~ 
 * ~~Applicant: Display available listings~~
 * Applicant: Apply for apartments
-* Admin: Add new rental objects to existing properties
 * Admin: Award contracts to the applicant with the longest waiting time
 * Admin: List all active contracts
 

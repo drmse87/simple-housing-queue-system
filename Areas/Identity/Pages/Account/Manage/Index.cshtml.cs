@@ -25,7 +25,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
 
         public string Username { get; set; }
         
-        [Display(Name = "Registration date")]
+        [Display(Name = "Registration Date")]
         public string RegistrationDate { get; set; }
 
         [TempData]
@@ -35,9 +35,15 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
         public InputModel Input { get; set; }
 
         public class InputModel
-        { 
+        {
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+            [Display(Name = "Street Address")]
+            public string StreetAddress { get; set; }
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
         }
 
@@ -48,11 +54,18 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
 
             Username = userName;
 
+            var FirstName = user.FirstName;
+            var LastName = user.LastName;
+            var StreetAddress = user.StreetAddress;
+
             RegistrationDate = user.RegistrationDate.ToShortDateString();
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FirstName = FirstName,
+                LastName = LastName,
+                StreetAddress = StreetAddress
             };
         }
 
@@ -92,6 +105,11 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
                     return RedirectToPage();
                 }
             }
+
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.StreetAddress = Input.StreetAddress;
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
