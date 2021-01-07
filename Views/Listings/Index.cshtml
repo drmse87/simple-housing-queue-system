@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<OpenListingViewModel>
+@{
     ViewData["Title"] = "Listings";
 }
 
@@ -7,53 +8,32 @@
 </div>
 
 <div class="listings">
+@foreach (var item in Model)
+{
     <div class="listings-item">
         <div class="listings-item-img">
-            <img src="hmm.png">
+            <img src=@($"/img/{item.PropertyPhotoUrl}")>
         </div>
         <div class="listings-item-area">
-            <h2>Area</h2>
+            <h2>@item.StreetAddress i @item.Name</h2>
         </div>
         <div class="listings-item-descr">
-            <h5>6 rooms and kitchen</h5>
-            <h6>5000 SEK/month</h6>
+            <h5>@item.Rooms (@item.Size m2)</h5>
+            <h6>@item.Rent SEK/month</h6>
+            <ul>
+                <li>Publicerad: @item.PublishDate</li>
+                <li>Sista ansökningsdatum: @item.LastApplicationDate</li>
+                <li>Inflytt: @item.MoveInDate</li>
+            </ul>
         </div>
+        @if (User.Identity.IsAuthenticated)
+        {
         <div class="listings-item-btn">
             <p>Btn</p>
         </div>
+        }
     </div>
-
-    <div class="listings-item">
-        <div class="listings-item-img">
-            <img src="hmm.png">
-        </div>
-        <div class="listings-item-area">
-            <h2>Area</h2>
-        </div>
-        <div class="listings-item-descr">
-            <h5>6 rooms and kitchen</h5>
-            <h6>5000 SEK/month</h6>
-        </div>
-        <div class="listings-item-btn">
-            <p>Btn</p>
-        </div>
-    </div>
-
-    <div class="listings-item">
-        <div class="listings-item-img">
-            <img src="hmm.png">
-        </div>
-        <div class="listings-item-area">
-            <h2>Area</h2>
-        </div>
-        <div class="listings-item-descr">
-            <h5>6 rooms and kitchen</h5>
-            <h6>5000 SEK/month</h6>
-        </div>
-        <div class="listings-item-btn">
-            <p>Btn</p>
-        </div>
-    </div>
+}
 
 </div>
 

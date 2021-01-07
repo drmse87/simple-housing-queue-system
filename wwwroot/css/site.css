@@ -82,3 +82,7 @@ body {
   border-color: 1px solid #c0c0c0;
   flex-basis: 30%;
 }
+
+.listings-item img {
+  width: 350px;
+}
