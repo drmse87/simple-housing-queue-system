@@ -118,7 +118,7 @@ WHERE EndDate IS NULL OR EndDate > GETDATE();
 ##### ✓ Displaying all listings (still open for application), created as a view...
 ```
 CREATE VIEW View_AllOpenListings AS
-    SELECT A.Name, RO.Rooms, RO.Size, RO.Rent, P.StreetAddress, P.PropertyPhotoUrl, L.PublishDate, L.LastApplicationDate, L.MoveInDate
+    SELECT A.Name, RO.Rooms, RO.Size, RO.Rent, P.StreetAddress, P.PropertyPhotoUrl, L.ListingID, L.PublishDate, L.LastApplicationDate, L.MoveInDate
     FROM Listings AS L
     INNER JOIN RentalObjects as RO
         ON RO.RentalObjectID=L.RentalObjectID
@@ -129,7 +129,7 @@ CREATE VIEW View_AllOpenListings AS
     WHERE L.LastApplicationDate > GETDATE()
 ```
 
-##### Display specific listing (details)
+##### ✓ Display specific listing (details)
 ```
 SELECT ListingID, L.RentalObjectID, Rent, RentalObjectType, 
         Floor, FloorPlanUrl, Rooms, Size, StreetAddress, 

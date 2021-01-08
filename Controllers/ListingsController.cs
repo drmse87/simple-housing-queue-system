@@ -31,6 +31,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
             var allOpenListings = _context.OpenListings.ToList();
             IEnumerable<OpenListingViewModel> model = allOpenListings.Select(o => {
                 return new OpenListingViewModel {
+                    ListingID = o.ListingID,
                     Name = o.Name,
                     Rooms = o.Rooms.GetType()?
                                     .GetMember(o.Rooms.ToString())?
@@ -52,7 +53,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
 
         public IActionResult Details(string id)
         {
-            var model = _context.Listings.FromSqlRaw(@"SELECT ListingID, L.RentalObjectID, Rent, RentalObjectType, 
+            var specificListingDetail = _context.ListingDetails.FromSqlRaw(@"SELECT ListingID, L.RentalObjectID, Rent, RentalObjectType, 
                                                 Floor, FloorPlanUrl, Rooms, Size, StreetAddress, 
                                                 P.Description AS PropertyDescription, PropertyPhotoUrl, 
                                                 A.Description AS AreaDescription, Name, PublishDate, 
@@ -65,9 +66,39 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
                                                 INNER JOIN Areas AS A
                                                     ON P.AreaID=A.AreaID
                                                     WHERE L.ListingID = {0}", id)
-                                                .ToList();
+                                                    .ToList()
+                                                    .FirstOrDefault();
 
-            return View();
+            if (specificListingDetail == null) return new NotFoundResult();
+
+            ListingDetailViewModel model = new ListingDetailViewModel {
+                    ListingID = specificListingDetail.ListingID,
+                    RentalObjectID = specificListingDetail.RentalObjectID,
+                    RentalObjectType = specificListingDetail.RentalObjectType,
+                    Floor = specificListingDetail.Floor.GetType()?
+                                    .GetMember(specificListingDetail.Floor.ToString())?
+                                    .First()
+                                    .GetCustomAttribute<DisplayAttribute>()?
+                                    .Name,
+                    Rooms = specificListingDetail.Rooms.GetType()?
+                                    .GetMember(specificListingDetail.Rooms.ToString())?
+                                    .First()
+                                    .GetCustomAttribute<DisplayAttribute>()?
+                                    .Name,
+                    Rent = specificListingDetail.Rent.ToString("F"),
+                    Size = specificListingDetail.Size.ToString("F"),
+                    FloorPlanUrl = specificListingDetail.FloorPlanUrl,
+                    StreetAddress = specificListingDetail.StreetAddress,
+                    PropertyDescription = specificListingDetail.PropertyDescription,
+                    PropertyPhotoUrl = specificListingDetail.PropertyPhotoUrl,
+                    AreaDescription = specificListingDetail.AreaDescription,
+                    Name = specificListingDetail.Name,
+                    PublishDate = specificListingDetail.PublishDate.ToShortDateString(),
+                    LastApplicationDate = specificListingDetail.LastApplicationDate.ToShortDateString(),
+                    MoveInDate = specificListingDetail.MoveInDate.ToShortDateString()                                     
+                };
+
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

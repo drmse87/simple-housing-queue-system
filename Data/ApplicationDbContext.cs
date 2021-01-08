@@ -22,6 +22,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
         public DbSet<Models.Application> Applications { get; set; }
         public DbSet<Models.Contract> Contracts { get; set; }
         public DbSet<Models.OpenListing> OpenListings { get; set; }
+        public DbSet<Models.ListingDetail> ListingDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
                 {
                     eb.HasNoKey();
                     eb.ToView("View_AllOpenListings");
+                    eb.Property(v => v.ListingID).HasColumnName("ListingID");
                     eb.Property(v => v.Name).HasColumnName("Name");
                     eb.Property(v => v.Rooms).HasColumnName("Rooms");
                     eb.Property(v => v.Size).HasColumnName("Size");
@@ -46,7 +48,13 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
                     eb.Property(v => v.PublishDate).HasColumnName("PublishDate");
                     eb.Property(v => v.LastApplicationDate).HasColumnName("LastApplicationDate");
                     eb.Property(v => v.MoveInDate).HasColumnName("MoveInDate");
-                });            
+                });    
+
+            modelBuilder
+                .Entity<Models.ListingDetail>(eb => 
+                {
+                    eb.HasNoKey();
+                });
         }
     }
 }

@@ -26,12 +26,16 @@
                 <li>Inflytt: @item.MoveInDate</li>
             </ul>
         </div>
-        @if (User.Identity.IsAuthenticated)
-        {
         <div class="listings-item-btn">
-            <p>Btn</p>
+            <p>
+                <a asp-action="Details" asp-route-id="@item.ListingID">Läs mer</a>
+            </p>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                
+            }
         </div>
-        }
     </div>
 }
 
