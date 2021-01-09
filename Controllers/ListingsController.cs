@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Principal;
+using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
 using csharp_asp_net_core_mvc_housing_queue.Models;
 using System.ComponentModel.DataAnnotations;
@@ -26,9 +29,9 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var allOpenListings = _context.OpenListings.ToList();
+            var allOpenListings = await _context.OpenListings.ToListAsync();
             IEnumerable<OpenListingViewModel> model = allOpenListings.Select(o => {
                 return new OpenListingViewModel {
                     ListingID = o.ListingID,
@@ -51,9 +54,9 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
             return View(model);
         }
 
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
-            var specificListingDetail = _context.ListingDetails.FromSqlRaw(@"SELECT ListingID, L.RentalObjectID, Rent, RentalObjectType, 
+            var specificListingDetail = await _context.ListingDetails.FromSqlRaw(@"SELECT ListingID, L.RentalObjectID, Rent, RentalObjectType, 
                                                 Floor, FloorPlanUrl, Rooms, Size, StreetAddress, 
                                                 P.Description AS PropertyDescription, PropertyPhotoUrl, 
                                                 A.Description AS AreaDescription, Name, PublishDate, 
@@ -66,8 +69,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
                                                 INNER JOIN Areas AS A
                                                     ON P.AreaID=A.AreaID
                                                     WHERE L.ListingID = {0}", id)
-                                                    .ToList()
-                                                    .FirstOrDefault();
+                                                    .FirstOrDefaultAsync();
 
             if (specificListingDetail == null) return new NotFoundResult();
 
@@ -99,6 +101,42 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
                 };
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MakeNewApplication(string id)
+        {
+            string listingId = id;
+            string userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Check if user has previously applied for object.
+            var previouslyAppliedForObject = await _context.Applications
+                .FromSqlInterpolated($"SELECT * FROM Applications WHERE ListingID = {listingId} AND UserId = {userId}")
+                .FirstOrDefaultAsync();
+            if (previouslyAppliedForObject != null)
+            {
+                TempData["Message"] = "You have already applied for this object.";
+                return RedirectToAction("Index");
+            }
+
+            // Check if user already has active contract.
+            var activeContract = await _context.Contracts
+                                            .FromSqlInterpolated($"SELECT * FROM Contracts WHERE UserID = {userId} AND EndDate IS NULL OR EndDate > GETDATE();")
+                                            .FirstOrDefaultAsync();
+            if (previouslyAppliedForObject != null)
+            {
+                TempData["Message"] = "You already have an active contract and are unable to apply for new objects.";
+                return RedirectToAction("Index");
+            }
+
+            // Make a new application.
+            string applicationId = Guid.NewGuid().ToString();
+            DateTime applicationDate = DateTime.Now;
+            await _context.Database.ExecuteSqlRawAsync(@"INSERT INTO Applications 
+                                            (ApplicationID, UserID, ListingID, ApplicationDate) 
+                                            VALUES ({0}, {1}, {2}, {3})", applicationId, userId, listingId, applicationDate);
+            TempData["Message"] = "Successfully applied for object.";
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

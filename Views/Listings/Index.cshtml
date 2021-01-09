@@ -4,7 +4,9 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Available listings</h1>   
+    <h1>@ViewData["Title"]</h1>
+
+    <partial name="_InfoMessage">
 </div>
 
 <div class="listings">
@@ -15,15 +17,15 @@
             <img src=@($"/img/{item.PropertyPhotoUrl}")>
         </div>
         <div class="listings-item-area">
-            <h2>@item.StreetAddress i @item.Name</h2>
+            <h2>@item.StreetAddress in @item.Name</h2>
         </div>
         <div class="listings-item-descr">
             <h5>@item.Rooms (@item.Size m2)</h5>
             <h6>@item.Rent SEK/month</h6>
             <ul>
-                <li>Publicerad: @item.PublishDate</li>
-                <li>Sista ansökningsdatum: @item.LastApplicationDate</li>
-                <li>Inflytt: @item.MoveInDate</li>
+                <li>Published: @item.PublishDate</li>
+                <li>Last application date: @item.LastApplicationDate</li>
+                <li>Movein date: @item.MoveInDate</li>
             </ul>
         </div>
         <div class="listings-item-btn">
@@ -33,7 +35,9 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                
+                <form asp-action="MakeNewApplication" method="post" asp-route-id="@item.ListingID">
+                    <input type="submit" value="Apply" /> 
+                </form>
             }
         </div>
     </div>

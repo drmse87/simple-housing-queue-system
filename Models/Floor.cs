@@ -5,7 +5,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
     public enum Floor
     {
         None,
-        [Display(Name = "BV")]
+        [Display(Name = "Ground floor")]
         GroundFloor,
         [Display(Name = "1")]
         FirstFloor,

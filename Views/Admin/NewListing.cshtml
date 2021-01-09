@@ -1,0 +1,30 @@
+@model NewListingEditViewModel
+@{
+    ViewData["Title"] = "New listing";
+    string rentalObjectId = Url.ActionContext.RouteData.Values["id"].ToString();
+}
+
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+
+    <partial name="_InfoMessage">
+    <p>
+        @{
+            if(!string.IsNullOrEmpty(rentalObjectId))
+            {
+                <h2>Put up object (@rentalObjectId) for listing</h2>
+
+                <form asp-action="NewListing" method="post" asp-route-id="@rentalObjectId">
+                    <input type="hidden" asp-for="RentalObjectId" value="@rentalObjectId" />
+                    Last application date: <input type="date" asp-for="LastApplicationDate" />
+                    Move in date: <input type="date" asp-for="MoveInDate" />
+                    <input type="submit" value="Put up for listing"/>
+                </form>                   
+            }
+            else
+            {
+                <p>No rental object provided.</p>
+            }
+        }
+    </p>
+</div>

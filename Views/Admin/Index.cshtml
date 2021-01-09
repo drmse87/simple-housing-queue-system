@@ -1,16 +1,84 @@
-﻿@{
+﻿@model AdminViewModel
+@{
     ViewData["Title"] = "Admin";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<partial name="_InfoMessage">
-
 <div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+
+    <partial name="_InfoMessage">
+
     <p>
-        <ul>
-            <li><a asp-action="NewArea">Add new area</a></li>
-            <li><a asp-action="RentalObjects">See all rental objects</a></li>
-        </ul>
-    </p>
+        <h2>Rental objects without contracts (but perhaps put up for listing?)</h2>
+        @foreach (var item in Model.RentalObjectsWithoutContracts)
+        {
+            <ul>
+                <li>
+                    Rental object ID: @item.RentalObjectID
+                </li>
+            </ul>
+        }
+
+        <h2>Rental objects without contracts and listings</h2>
+        @foreach (var item in Model.RentalObjectsWithoutContractsAndListings)
+        {
+            <ul>
+                <li>
+                    Rental object ID: @item.RentalObjectID <a asp-action="NewListing" asp-route-id="@item.RentalObjectID">Put up for listing</a>
+                </li>
+            </ul>
+        }
+
+        <h2>Active contracts</h2>
+        @foreach (var item in Model.ActiveContracts)
+        {
+            <ul>
+                <li>First name: @item.FirstName</li>
+                <li>Last name: @item.LastName</li>
+                <li>Object id: @item.RentalObjectID</li>
+                <li>Start date: @item.StartDate</li>
+                <li>End date: @item.EndDate</li>
+            </ul>
+        }
+        </p>
+
+    <h2>All open listings and queing applicants</h2>
+</div>
+
+<div class="listings">
+    @foreach (var item in Model.AllListingsAndQueingApplicants)
+    {
+        <div class="listings-item">
+            <ul>
+                <li>Ad ID: @item.ListingID</li>
+                <li>Area: @item.Name</li>
+                <li>Rooms: @item.Rooms</li>
+                <li>Size: @item.Size</li>
+                <li>Rent: @item.Rent</li>
+                <li>Address: @item.StreetAddress</li>
+                <li>Property: <img src="/img/@item.PropertyPhotoUrl" /></li>
+                <li>Published: @item.PublishDate</li>
+                <li>Last application date: @item.LastApplicationDate</li>
+                <li>Move in date: @item.MoveInDate</li>
+                <li>
+                    <h3>Applicants for this object</h3>
+                        <ul class="listings-applicant">
+                        @foreach (var applicant in item.QueuingApplicants)
+                        {
+                            <li>
+                                <ul>
+                                    <li>User id: @applicant.UserId</li>
+                                    <li>First name: @applicant.FirstName</li>
+                                    <li>Last name: @applicant.LastName</li>
+                                    <li>Registration date: @applicant.RegistrationDate</li>
+                                    <li>Application date: @applicant.ApplicationDate</li>
+                                    <li>Queue time: @applicant.QueueTime</li>
+                                </ul>
+                            </li>
+                        }
+                        </ul>
+                </li>
+            </ul>
+        </div>
+    }
 </div>

@@ -67,15 +67,17 @@ Preliminarily, the following tables and columns will be used:
 * ~~Add custom user data such as registration date to Identity model (https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0)~~
 * ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
 * ~~Add all entities and migrate them~~
-* Add bundling/minification?
-* Add Rent, Url, Address, Description, ApartmentSize types
 
 #### Requirements
 * ~~Applicant: Register in the housing queue~~ 
 * ~~Applicant: Display available listings~~
-* Applicant: Apply for apartments
-* Admin: Award contracts to the applicant with the longest waiting time
-* Admin: List all active contracts
+* ~~Applicant: Apply for apartments~~
+* ~~Admin: List all active contracts~~
+
+#### Things that could have been done, but won't be done
+* Add bundling/minification?
+* Add Rent, Url, Address, Description, ApartmentSize types
+* Admin: Add/Edit rental objects, areas, properties
 
 ### SQL queries
 Raw SQL queries will be used instead of LINQ (required by the assignment), either with FromSqlRaw() and ExecuteSqlRaw() methods but more likely with Keyless Entity Types (https://docs.microsoft.com/en-us/ef/core/modeling/keyless-entity-types?tabs=data-annotations):
@@ -86,24 +88,43 @@ var blogs = context.Blogs
     .ToList();
 ```
 #### Admins
-##### What rental objects have no active contracts?
+##### ✓ What rental objects have no active contracts (but could have been put up for listing)?
 ```
 SELECT * FROM RentalObjects
 WHERE RentalObjectID NOT IN 
 	(SELECT RentalObjectID FROM Contracts WHERE EndDate IS NULL OR EndDate > GETDATE());
 ```
 
-#### Who has the longest waiting time for a listing (first order by longest queue time, then who applied first)?
+##### ✓ What rental objects have no active contracts and have not been put up for listing?
+```
+SELECT * FROM RentalObjects
+WHERE RentalObjectID NOT IN 
+	(SELECT RentalObjectID FROM Contracts WHERE EndDate IS NULL OR EndDate > GETDATE())
+AND RentalObjectID NOT IN 
+	(SELECT RentalObjectID FROM Listings WHERE LastApplicationDate > GETDATE());
+```
+
+#### ✓ Who has the longest waiting time for a listing (first order by longest queue time, then who applied first)?
 ```
 SELECT UserId, FirstName, LastName, RegistrationDate, ApplicationDate, DATEDIFF(DAY, RegistrationDate, GETDATE()) AS QueueTime
 FROM Applications AS A
 INNER JOIN AspNetUsers AS U
 	ON A.UserId=U.Id
 WHERE ListingID = ''
-ORDER BY QueueTime DESC, ApplicationDate ASC
+ORDER BY QueueTime DESC, ApplicationDate ASC OFFSET 0 ROWS
 ```
 
-#### List all active contracts and name of owner
+#### Create new listing
+```
+INSERT INTO Listings 
+    (ListingID, RentalObjectID, PublishDate, 
+    LastApplicationDate, MoveInDate) 
+    VALUES (listingId, rentalObjectId, 
+    publishDate, lastApplicationDate, 
+    moveInDate)"
+```
+
+#### ✓ List all active contracts and name of owner
 ```
 SELECT U.FirstName, U.LastName, RO.RentalObjectID, C.StartDate, C.EndDate 
 FROM Contracts as C
@@ -172,12 +193,18 @@ GROUP BY A.Name;
 ```
 
 #### For individual applicants (users)
-##### Make an application
+##### ✓ Make an application
 Check if already made application for listing:
 ```
 SELECT * FROM Applications WHERE ListingID = '' AND UserID = ''
 ```
-Then add it:
+
+Check if already has active contract:
+```
+SELECT * FROM Contracts WHERE UserID = '' AND EndDate IS NULL OR EndDate > GETDATE();
+```
+
+Finally make application:
 ```
 INSERT INTO Applications (ApplicationID, UserID, ListingID, ApplicationDate) 
     VALUES ({0}, {1}, {2}, {2})", applicationID, userID, listingID, applicationDate)

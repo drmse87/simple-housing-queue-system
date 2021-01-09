@@ -3,24 +3,25 @@
     ViewData["Title"] = "Listing details";
 }
 
-<h1 class="display-4">Listing details</h1>
-
 <div class="text-center">
-    <h2>@Model.StreetAddress i @Model.Name</h2>
+    <h1>@ViewData["Title"]</h1>
+
+    <partial name="_InfoMessage">
+
+    <h2>@Model.StreetAddress in @Model.Name</h2>
     <p>@Model.AreaDescription</p>
     <p>@Model.PropertyDescription <img src=@($"/img/{Model.PropertyPhotoUrl}")></p> 
     <ul>
-        <li>Annons-id: @Model.ListingID</li>
-        <li>Objekt-id: @Model.RentalObjectID</li>
-        <li>Objekttyp: @Model.RentalObjectType</li>
-        <li>Våning: @Model.Floor</li>
-        <li>Rum: @Model.Rooms</li>
-        <li>Hyra: @Model.Rent</li>
-        <li>Storlek: @Model.Size</li>
-        <li>Planlösning: @Model.FloorPlanUrl</li>
-        <li>Publicerad: @Model.PublishDate</li>
-        <li>Senaste ansökningsdatum: @Model.LastApplicationDate</li>
-        <li>Inflyttning: @Model.MoveInDate</li>
+        <li>Ad ID: @Model.ListingID</li>
+        <li>Rental object ID: @Model.RentalObjectID</li>
+        <li>Rental object type: @Model.RentalObjectType</li>
+        <li>Floor: @Model.Floor</li>
+        <li>Rooms: @Model.Rooms</li>
+        <li>Rent: @Model.Rent</li>
+        <li>Size: @Model.Size</li>
+        <li>Floorplan: @Model.FloorPlanUrl</li>
+        <li>Published: @Model.PublishDate</li>
+        <li>Last application date: @Model.LastApplicationDate</li>
+        <li>Move in: @Model.MoveInDate</li>
     </ul>
-
 </div>
