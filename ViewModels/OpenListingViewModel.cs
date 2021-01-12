@@ -5,7 +5,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
     public class OpenListingViewModel
     {
         public string ListingID { get; set; }
-
         public string Name { get; set; }
         public string Rooms { get; set; }
         public string Size { get; set; }

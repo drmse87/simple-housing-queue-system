@@ -19,6 +19,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
         public RentalObject RentalObject { get; set; }
 
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime ContractAwardedDate { get; set; }
     }
 }

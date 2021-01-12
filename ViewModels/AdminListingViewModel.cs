@@ -6,6 +6,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
     public class AdminListingViewModel
     {
         public IEnumerable<QueuingApplicantViewModel> QueuingApplicants { get; set; }
+        public string RentalObjectID { get; set; }
         public string ListingID { get; set; }
         public string Name { get; set; }
         public string Rooms { get; set; }

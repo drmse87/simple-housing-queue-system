@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csharp_asp_net_core_mvc_housing_queue.Data;
 
 namespace csharp_asp_net_core_mvc_housing_queue.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210111213358_AddingContractAwardedDateAndListingClosureDate")]
+    partial class AddingContractAwardedDateAndListingClosureDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,7 +303,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.Property<DateTime>("ContractAwardedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("EndDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RentalObjectID")
@@ -331,7 +333,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.Property<DateTime>("LastApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ListingClosureDate")
+                    b.Property<DateTime>("ListingClosureDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("MoveInDate")

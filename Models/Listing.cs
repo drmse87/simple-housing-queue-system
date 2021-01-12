@@ -17,5 +17,6 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
         public DateTime PublishDate { get; set; }
         public DateTime LastApplicationDate { get; set; }
         public DateTime MoveInDate { get; set; }
+        public DateTime? ListingClosureDate { get; set; }
     }
 }

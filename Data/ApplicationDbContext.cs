@@ -25,6 +25,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
         public DbSet<Models.ListingDetail> ListingDetails { get; set; }
         public DbSet<Models.ActiveContract> ActiveContracts { get; set; }
         public DbSet<Models.QueuingApplicant> QueuingApplicants { get; set; }
+        public DbSet<Models.RentalObjectsPerAreaCount> RentalObjectsPerAreaCounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,6 +57,12 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
 
             modelBuilder
                 .Entity<Models.QueuingApplicant>(eb => 
+                {
+                    eb.HasNoKey();
+                });
+
+            modelBuilder
+                .Entity<Models.RentalObjectsPerAreaCount>(eb => 
                 {
                     eb.HasNoKey();
                 });

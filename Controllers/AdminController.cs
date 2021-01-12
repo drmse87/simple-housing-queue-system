@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using csharp_asp_net_core_mvc_housing_queue.Models;
@@ -28,13 +29,24 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var rentalObjectsPerAreaCounts = await _context.RentalObjectsPerAreaCounts
+                                                         .FromSqlInterpolated(
+                                                        $@"SELECT A.Name AS AreaName, COUNT(RentalObjectID) AS NumberOfRentalObjectsInArea
+                                                        FROM RentalObjects AS RO
+                                                        INNER JOIN Properties AS P 
+                                                            ON RO.PropertyID=P.PropertyID
+                                                        INNER JOIN Areas AS A
+                                                            ON P.AreaID=A.AreaID
+                                                        GROUP BY A.Name")
+                                                        .ToListAsync();
+
             var rentalObjectsWithoutContracts = await _context.RentalObjects
                                                          .FromSqlInterpolated(
                                                         $@"SELECT * FROM RentalObjects
                                                         WHERE RentalObjectID NOT IN 
                                                             (SELECT RentalObjectID 
                                                             FROM Contracts 
-                                                            WHERE EndDate IS NULL OR EndDate > GETDATE());")
+                                                            WHERE EndDate IS NULL OR EndDate > GETDATE())")
                                                         .ToListAsync();
 
             var rentalObjectsWithoutContractsAndListings = await _context.RentalObjects
@@ -47,7 +59,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
                                                             AND RentalObjectID NOT IN 
                                                                 (SELECT RentalObjectID 
                                                                 FROM Listings 
-                                                                WHERE LastApplicationDate > GETDATE())
+                                                                WHERE LastApplicationDate > GETDATE() AND ListingClosureDate IS NULL)
                                                             ")
                                                         .ToListAsync();
         
@@ -60,12 +72,13 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
                                                             ON C.UserId=U.Id
                                                         INNER JOIN RentalObjects as RO
                                                             ON C.RentalObjectID=RO.RentalObjectID
-                                                        WHERE EndDate IS NULL OR EndDate > GETDATE();")
+                                                        WHERE EndDate IS NULL OR EndDate > GETDATE()")
                                                         .ToListAsync();
 
             var allOpenListings = await _context.OpenListings.ToListAsync();
 
-            IEnumerable<AdminListingViewModel> allListingsAndQueingApplicants = allOpenListings.Select(o => {
+            IEnumerable<AdminListingViewModel> allListingsAndQueingApplicants = allOpenListings
+            .Select(o => {
                 var queuingApplicants = _context.QueuingApplicants
                                                             .FromSqlInterpolated(
                                                                 $@"SELECT UserId, FirstName, LastName, 
@@ -87,6 +100,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
 
                     return new AdminListingViewModel {
                         QueuingApplicants = queuingApplicants,
+                        RentalObjectID = o.RentalObjectID,
                         ListingID = o.ListingID,
                         Name = o.Name,
                         Rooms = o.Rooms.GetType()?
@@ -105,10 +119,12 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
                 });
 
             AdminViewModel model = new AdminViewModel {
-                RentalObjectsWithoutContracts = rentalObjectsWithoutContracts,
-                RentalObjectsWithoutContractsAndListings = rentalObjectsWithoutContractsAndListings,
                 ActiveContracts = allActiveContracts,
                 AllListingsAndQueingApplicants = allListingsAndQueingApplicants,
+                NewContractEditViewModel = new NewContractEditViewModel(),
+                RentalObjectsPerAreaCounts = rentalObjectsPerAreaCounts,
+                RentalObjectsWithoutContracts = rentalObjectsWithoutContracts,
+                RentalObjectsWithoutContractsAndListings = rentalObjectsWithoutContractsAndListings,
             };            
 
             return View(model);
@@ -134,10 +150,53 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
             await _context.Database.ExecuteSqlInterpolatedAsync($@"INSERT INTO Listings 
                                                                 (ListingID, RentalObjectID, PublishDate, 
                                                                 LastApplicationDate, MoveInDate) 
-                                                                VALUES ({listingId}, {model.RentalObjectId}, 
+                                                                VALUES ({listingId}, {model.RentalObjectID}, 
                                                                 {publishDate}, {model.LastApplicationDate}, 
                                                                 {model.MoveInDate})");
             TempData["Message"] = "Successfully created new listing.";
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult NewContract()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewContract(NewContractEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Message"] = "Invalid input.";
+                return View();
+            }
+
+            // First check if user already has active contract.
+            var activeContract = await _context.Contracts
+                                            .FromSqlInterpolated($"SELECT * FROM Contracts WHERE UserID = {model.UserID} AND EndDate IS NULL OR EndDate > GETDATE()")
+                                            .FirstOrDefaultAsync();
+            if (activeContract != null)
+            {
+                TempData["Message"] = "User already has an active contract.";
+                return RedirectToAction("Index");
+            }
+
+            // Then update listing closure date.
+            DateTime now = DateTime.Now;
+            await _context.Database.ExecuteSqlInterpolatedAsync($@"UPDATE Listings
+                                                                SET ListingClosureDate = {now}
+                                                                WHERE ListingID = {model.ListingID}");
+
+            // Finally award contract.
+            string contractId = Guid.NewGuid().ToString();
+            DateTime awardedDate = DateTime.Now;
+            await _context.Database.ExecuteSqlInterpolatedAsync($@"INSERT INTO Contracts 
+                                                                (ContractID, UserId, RentalObjectID, 
+                                                                StartDate, ContractAwardedDate) 
+                                                                VALUES ({contractId}, {model.UserID}, 
+                                                                {model.RentalObjectID}, {model.StartDate}, {awardedDate})");
+            TempData["Message"] = "Successfully awarded contract.";
             return RedirectToAction("Index");
         }
 

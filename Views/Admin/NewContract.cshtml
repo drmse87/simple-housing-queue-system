@@ -1,0 +1,39 @@
+@model NewContractEditViewModel
+@{
+    ViewData["Title"] = "New contract";
+    string rentalObjectId = Context.Request.Query["rentalObjectId"].ToString();
+    string listingId = Context.Request.Query["listingId"].ToString();
+    string userId = Context.Request.Query["userId"].ToString();
+    string today = DateTime.Today.ToString("yyyy-MM-dd");
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <partial name="_InfoMessage">
+
+    <p>
+        @{
+            if(!string.IsNullOrEmpty(rentalObjectId) ||
+            !string.IsNullOrEmpty(listingId) ||
+            !string.IsNullOrEmpty(userId)
+            )
+            {
+                <h2>Award new contract to (@userId) for (@rentalObjectId)</h2>
+
+                <form asp-action="NewContract" method="post">
+                    <input type="hidden" asp-for="@Model.RentalObjectID" value="@rentalObjectId" />
+                    <input type="hidden" asp-for="@Model.ListingID" value="@listingId" />
+                    <input type="hidden" asp-for="@Model.UserID" value="@userId" />
+                    Start date:
+                    <input type="date" value="@today" asp-for="@Model.StartDate" />
+                    <input type="submit" value="Award contract"/>
+                </form>                   
+            }
+            else
+            {
+                <p>No rental object provided.</p>
+            }
+        }
+    </p>
+</div>

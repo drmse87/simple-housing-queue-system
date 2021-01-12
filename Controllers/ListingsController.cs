@@ -56,7 +56,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var specificListingDetail = await _context.ListingDetails.FromSqlRaw(@"SELECT ListingID, L.RentalObjectID, Rent, RentalObjectType, 
+            var specificListingDetail = await _context.ListingDetails.FromSqlInterpolated($@"SELECT ListingID, L.RentalObjectID, Rent, RentalObjectType, 
                                                 Floor, FloorPlanUrl, Rooms, Size, StreetAddress, 
                                                 P.Description AS PropertyDescription, PropertyPhotoUrl, 
                                                 A.Description AS AreaDescription, Name, PublishDate, 
@@ -68,7 +68,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
                                                     ON P.PropertyID=RO.PropertyID
                                                 INNER JOIN Areas AS A
                                                     ON P.AreaID=A.AreaID
-                                                    WHERE L.ListingID = {0}", id)
+                                                    WHERE L.ListingID = {id}")
                                                     .FirstOrDefaultAsync();
 
             if (specificListingDetail == null) return new NotFoundResult();
@@ -121,9 +121,9 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
 
             // Check if user already has active contract.
             var activeContract = await _context.Contracts
-                                            .FromSqlInterpolated($"SELECT * FROM Contracts WHERE UserID = {userId} AND EndDate IS NULL OR EndDate > GETDATE();")
+                                            .FromSqlInterpolated($"SELECT * FROM Contracts WHERE UserID = {userId} AND EndDate IS NULL OR EndDate > GETDATE()")
                                             .FirstOrDefaultAsync();
-            if (previouslyAppliedForObject != null)
+            if (activeContract != null)
             {
                 TempData["Message"] = "You already have an active contract and are unable to apply for new objects.";
                 return RedirectToAction("Index");
@@ -132,9 +132,9 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
             // Make a new application.
             string applicationId = Guid.NewGuid().ToString();
             DateTime applicationDate = DateTime.Now;
-            await _context.Database.ExecuteSqlRawAsync(@"INSERT INTO Applications 
+            await _context.Database.ExecuteSqlInterpolatedAsync($@"INSERT INTO Applications 
                                             (ApplicationID, UserID, ListingID, ApplicationDate) 
-                                            VALUES ({0}, {1}, {2}, {3})", applicationId, userId, listingId, applicationDate);
+                                            VALUES ({applicationId}, {userId}, {listingId}, {applicationDate})");
             TempData["Message"] = "Successfully applied for object.";
             return RedirectToAction("Index");
         }

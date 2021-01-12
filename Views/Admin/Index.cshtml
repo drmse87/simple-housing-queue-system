@@ -4,11 +4,20 @@
 }
 
 <div class="text-center">
-    <h1>@ViewData["Title"]</h1>
+    <h1 class="display-4">@ViewData["Title"]</h1>
 
     <partial name="_InfoMessage">
 
     <p>
+        <h2>Number of rental objects per area</h2>
+        @foreach (var item in Model.RentalObjectsPerAreaCounts)
+        {
+            <p>
+                <h3>@item.AreaName</h3>
+                <strong>@item.NumberOfRentalObjectsInArea</strong>
+            </p>
+        }
+
         <h2>Rental objects without contracts (but perhaps put up for listing?)</h2>
         @foreach (var item in Model.RentalObjectsWithoutContracts)
         {
@@ -24,7 +33,7 @@
         {
             <ul>
                 <li>
-                    Rental object ID: @item.RentalObjectID <a asp-action="NewListing" asp-route-id="@item.RentalObjectID">Put up for listing</a>
+                    Rental object ID: @item.RentalObjectID <a asp-action="NewListing" asp-route-rentalObjectId="@item.RentalObjectID">Put up for listing</a>
                 </li>
             </ul>
         }
@@ -50,7 +59,8 @@
     {
         <div class="listings-item">
             <ul>
-                <li>Ad ID: @item.ListingID</li>
+                <li>Rental object ID: @item.RentalObjectID</li>
+                <li>Listing ID: @item.ListingID</li>
                 <li>Area: @item.Name</li>
                 <li>Rooms: @item.Rooms</li>
                 <li>Size: @item.Size</li>
@@ -73,6 +83,14 @@
                                     <li>Registration date: @applicant.RegistrationDate</li>
                                     <li>Application date: @applicant.ApplicationDate</li>
                                     <li>Queue time: @applicant.QueueTime</li>
+                                    <li>
+                                        <a 
+                                        asp-action="NewContract" 
+                                        asp-route-rentalObjectId="@item.RentalObjectID"
+                                        asp-route-listingId="@item.ListingID"
+                                        asp-route-userId="@applicant.UserId"                                                                                                                     
+                                        >Award new contract</a>
+                                    </li>
                                 </ul>
                             </li>
                         }

@@ -5,7 +5,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Models
 {
     public class NewListingEditViewModel
     {
-        public string RentalObjectId { get; set; }
+        public string RentalObjectID { get; set; }
         public DateTime LastApplicationDate { get; set; }
         public DateTime MoveInDate { get; set; }
     }
