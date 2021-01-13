@@ -212,6 +212,42 @@ INSERT INTO Applications
     VALUES ({applicationId}, {userId}, {listingId}, {applicationDate})
 ```
 
+##### ✓ See all made applications
+```
+SELECT L.ListingID, RO.RentalObjectID, RO.Rooms, RO.Size, 
+RO.Rent, P.StreetAddress, A.ApplicationDate, L.LastApplicationDate, L.MoveInDate
+FROM Applications AS A
+INNER JOIN Listings as L
+    ON A.ListingID = L.ListingID
+INNER JOIN RentalObjects as RO
+    ON L.RentalObjectID = RO.RentalObjectID
+INNER JOIN Properties as P
+    ON RO.PropertyID = P.PropertyID
+WHERE UserId = ''
+```
+##### ✓ What is applicant's position in the queue?
+```
+SELECT PlaceInQueue FROM
+	(SELECT UserId, ROW_NUMBER() OVER (ORDER BY QueueTime DESC, ApplicationDate ASC) AS PlaceInQueue
+	FROM
+		(SELECT UserId, ApplicationDate, DATEDIFF(DAY, RegistrationDate, GETDATE()) AS QueueTime
+		FROM Applications AS A
+		INNER JOIN AspNetUsers AS U
+			ON A.UserId=U.Id
+		WHERE ListingID = ''
+			) AS B
+	) as A
+WHERE UserId = ''
+```
+
+##### ✓ How many are queuing for a particular listing?
+```
+SELECT COUNT(UserId) AS ApplicantsCount
+FROM Applications
+WHERE ListingID = ''
+GROUP BY UserId
+```
+
 #### Queries that will not be implemented
 ##### How many (open) listings are there in each area?
 ```
@@ -225,21 +261,6 @@ INNER JOIN Areas AS A
 	ON P.AreaID=A.AreaID
 WHERE LastApplicationDate > GETDATE() AND ListingClosureDate IS NULL
 GROUP BY A.Name;
-```
-
-##### See all applications (previous and current)
-```
-SELECT RO.RentalObjectID, RO.Rooms, RO.Size, RO.Rent, P.StreetAddress, ApplicationDate, LastApplicationDate, L.MoveInDate
-FROM Applications AS A
-INNER JOIN AspNetUsers AS U
-	ON A.UserId=U.Id
-INNER JOIN Listings as L
-	ON A.ListingID = L.ListingID
-INNER JOIN RentalObjects as RO
-	ON L.RentalObjectID = RO.RentalObjectID
-INNER JOIN Properties as P
-	ON RO.PropertyID = P.PropertyID
-WHERE UserId = ''
 ```
 
 ### .NET commandline

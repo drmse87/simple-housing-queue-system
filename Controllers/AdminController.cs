@@ -79,7 +79,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Controllers
 
             IEnumerable<AdminListingViewModel> allListingsAndQueingApplicants = allOpenListings
             .Select(o => {
-                var queuingApplicants = _context.QueuingApplicants
+                var queuingApplicants = _context.QueuingApplicantsDetails
                                                             .FromSqlInterpolated(
                                                                 $@"SELECT UserId, FirstName, LastName, 
                                                                 RegistrationDate, ApplicationDate, 

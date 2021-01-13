@@ -7,6 +7,9 @@ using csharp_asp_net_core_mvc_housing_queue.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using System.Security.Claims;
 
 namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Manage
 {
@@ -14,16 +17,20 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly Data.ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            Data.ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         public string Username { get; set; }
+        public IEnumerable<MadeApplicationViewModel> MadeApplications { get; set; }
         
         [Display(Name = "Registration Date")]
         public string RegistrationDate { get; set; }
@@ -59,6 +66,65 @@ namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Man
             var StreetAddress = user.StreetAddress;
 
             RegistrationDate = user.RegistrationDate.ToShortDateString();
+
+            string userId = _userManager.GetUserId(User);
+            var allMadeApplications = _context.MadeApplications
+                                                .FromSqlInterpolated(
+                                                    $@"SELECT L.ListingID, RO.RentalObjectID, 
+                                                    RO.Rooms, RO.Size, RO.Rent, P.StreetAddress, 
+                                                    A.ApplicationDate, L.LastApplicationDate, L.MoveInDate
+                                                        FROM Applications AS A
+                                                        INNER JOIN Listings as L
+                                                            ON A.ListingID = L.ListingID
+                                                        INNER JOIN RentalObjects as RO
+                                                            ON L.RentalObjectID = RO.RentalObjectID
+                                                        INNER JOIN Properties as P
+                                                            ON RO.PropertyID = P.PropertyID
+                                                        WHERE UserId = {userId}")
+                                                    .ToList();
+            
+            MadeApplications = allMadeApplications.Select(a => {
+                var applicantQueuePosition = _context.QueingApplicantPositions
+                                                        .FromSqlInterpolated(
+                                                            $@"SELECT PlaceInQueue FROM
+                                                                (SELECT UserId, ROW_NUMBER() OVER (ORDER BY QueueTime DESC, ApplicationDate ASC) AS PlaceInQueue
+                                                                FROM
+                                                                    (SELECT UserId, ApplicationDate, DATEDIFF(DAY, RegistrationDate, GETDATE()) AS QueueTime
+                                                                    FROM Applications AS A
+                                                                    INNER JOIN AspNetUsers AS U
+                                                                        ON A.UserId=U.Id
+                                                                    WHERE ListingID = {a.ListingID}
+                                                                        ) AS B
+                                                                ) as A
+                                                            WHERE UserId = {userId}")
+                                                        .ToList();
+
+                var applicantsInQueueCount = _context.QueingApplicantCounts
+                                                        .FromSqlInterpolated(
+                                                            $@"SELECT COUNT(UserId) AS ApplicantsCount
+                                                                FROM Applications
+                                                                WHERE ListingID = {a.ListingID}
+                                                                GROUP BY UserId")
+                                                        .ToList();
+
+                return new MadeApplicationViewModel {
+                    ListingID = a.ListingID,
+                    RentalObjectID = a.RentalObjectID,
+                    Rooms = a.Rooms.GetType()?
+                                    .GetMember(a.Rooms.ToString())?
+                                    .First()
+                                    .GetCustomAttribute<DisplayAttribute>()?
+                                    .Name,
+                    Size = a.Size.ToString("F"),
+                    Rent = a.Rent.ToString("F"),
+                    StreetAddress = a.StreetAddress,
+                    ApplicationDate = a.ApplicationDate.ToShortDateString(),
+                    LastApplicationDate = a.LastApplicationDate.ToShortDateString(),
+                    MoveInDate = a.LastApplicationDate.ToShortDateString(),
+                    PlaceInQueue = applicantQueuePosition.First().PlaceInQueue.ToString() ?? "0",
+                    TotalApplicantsInQueue = applicantsInQueueCount.First().ApplicantsCount.ToString() ?? "0"
+                };
+            });
 
             Input = new InputModel
             {

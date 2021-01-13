@@ -24,8 +24,11 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
         public DbSet<Models.OpenListing> OpenListings { get; set; }
         public DbSet<Models.ListingDetail> ListingDetails { get; set; }
         public DbSet<Models.ActiveContract> ActiveContracts { get; set; }
-        public DbSet<Models.QueuingApplicant> QueuingApplicants { get; set; }
+        public DbSet<Models.QueuingApplicantDetail> QueuingApplicantsDetails { get; set; }
         public DbSet<Models.RentalObjectsPerAreaCount> RentalObjectsPerAreaCounts { get; set; }
+        public DbSet<Models.MadeApplication> MadeApplications { get; set; }
+        public DbSet<Models.QueingApplicantPosition> QueingApplicantPositions { get; set; }
+        public DbSet<Models.QueingApplicantsCount> QueingApplicantCounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,13 +59,31 @@ namespace csharp_asp_net_core_mvc_housing_queue.Data
                 });
 
             modelBuilder
-                .Entity<Models.QueuingApplicant>(eb => 
+                .Entity<Models.QueuingApplicantDetail>(eb => 
                 {
                     eb.HasNoKey();
                 });
 
             modelBuilder
                 .Entity<Models.RentalObjectsPerAreaCount>(eb => 
+                {
+                    eb.HasNoKey();
+                });
+
+            modelBuilder
+                .Entity<Models.MadeApplication>(eb => 
+                {
+                    eb.HasNoKey();
+                });
+            
+            modelBuilder
+                .Entity<Models.QueingApplicantPosition>(eb => 
+                {
+                    eb.HasNoKey();
+                });
+
+            modelBuilder
+                .Entity<Models.QueingApplicantsCount>(eb => 
                 {
                     eb.HasNoKey();
                 });

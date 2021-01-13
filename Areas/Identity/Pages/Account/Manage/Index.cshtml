@@ -41,6 +41,27 @@
             </div>
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>
+
+    <h4>Applications</h4>
+        <div class="form-group">
+            @{
+                foreach (var item in Model.MadeApplications)
+                {
+                    <ul>
+                        <li>Listing id: <a asp-action="Details" asp-controller="Listings" asp-route-id="@item.ListingID">@item.ListingID</a></li>
+                        <li>Rental object id: @item.RentalObjectID</li>
+                        <li>Rooms: @item.Rooms</li>
+                        <li>Size: @item.Size</li>
+                        <li>Rent: @item.Rent</li>
+                        <li>Street adress: @item.StreetAddress</li>
+                        <li>Application date: @item.ApplicationDate</li>
+                        <li>Last application date: @item.LastApplicationDate</li>
+                        <li>Move in date: @item.MoveInDate</li>
+                        <li>Place in queue: @item.PlaceInQueue out of @item.TotalApplicantsInQueue in total</li>
+                    </ul>
+                }
+            }
+        </div>
     </div>
 </div>
 
