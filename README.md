@@ -1,7 +1,7 @@
 # Simple Housing Queue System (bostadskösystem)
-I decided to develop a Simple Housing Queue MVC application with [ASP.NET Core](https://asp.net), Entity Framework and Microsoft SQL Server Web (64-bit) 15.0.4003.23.
+Simple Housing Queue MVC application built with [ASP.NET Core](https://asp.net), Entity Framework and Microsoft SQL Server Web (64-bit) 15.0.4003.23.
 
-# Technical details
+# Requirements
 ## Key concepts (entities)
 ### Rental object
 The object that can be rented (either an apartment or a parking spot).
@@ -35,7 +35,9 @@ Admins should be able to:
 * Admin: Terminating contracts
 * Admin: Invoice system
 
-## Database schema
+# Technical details
+## Database
+### Database schema
 * RentalObjects(RentalObjectID [PKEY], PropertyID [FKEY], Rent, RentalObjectType, Floor, FloorPlanUrl, ParkingSpotNumber, Rooms, Size)
 
 * Properties(PropertyID [PKEY], AreaID [FKEY], StreetAddress, Description, PropertyPhotoUrl)
@@ -55,18 +57,6 @@ Admins should be able to:
 
 ### SQL diagram
 ![SQL Diagram](Docs/sql-diagram-housing-queue.png "EF Diagram")
-
-### To do list
-* ~~Connect to SQL server using ASP.NET Core Secret Manager tool and SqlConnectionStringBuilder class~~
-* ~~Add authentication/authorization/Identity~~
-* ~~Add custom user data such as First Name, Last Name, Registration date to Identity model (https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0)~~
-* ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
-* ~~Add all entities and migrate them~~
-
-#### Things that could have been done, but won't be done
-* Bundling/minification?
-* Adding Rent, Url, Address, Description, ApartmentSize types
-* CSS (instead of standard bootstrapped design)
 
 ### SQL queries
 Raw SQL queries will be used instead of LINQ (required by the assignment), either with FromSqlRaw() and ExecuteSqlRaw() methods but more likely with Keyless Entity Types (https://docs.microsoft.com/en-us/ef/core/modeling/keyless-entity-types?tabs=data-annotations):
@@ -258,7 +248,21 @@ WHERE LastApplicationDate > GETDATE() AND ListingClosureDate IS NULL
 GROUP BY A.Name;
 ```
 
-### .NET commandline
+## Misc
+### To do list
+#### Done
+* ~~Connect to SQL server using ASP.NET Core Secret Manager tool and SqlConnectionStringBuilder class~~
+* ~~Add authentication/authorization/Identity~~
+* ~~Add custom user data such as First Name, Last Name, Registration date to Identity model (https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0)~~
+* ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
+* ~~Add all entities and migrate them~~
+
+#### Things that could have been done, but won't be done
+* Bundling/minification?
+* Adding Rent, Url, Address, Description, ApartmentSize types
+* CSS (instead of standard bootstrapped design)
+
+### .NET how-tos
 #### Migrations
 EF Core migrations:
 
