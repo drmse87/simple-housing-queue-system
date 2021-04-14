@@ -249,19 +249,6 @@ GROUP BY A.Name;
 ```
 
 ## Misc
-### To do list
-#### Done
-* ~~Connect to SQL server using ASP.NET Core Secret Manager tool and SqlConnectionStringBuilder class~~
-* ~~Add authentication/authorization/Identity~~
-* ~~Add custom user data such as First Name, Last Name, Registration date to Identity model (https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0)~~
-* ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
-* ~~Add all entities and migrate them~~
-
-#### Things that could have been done, but won't be done
-* Bundling/minification?
-* Adding Rent, Url, Address, Description, ApartmentSize types
-* CSS (instead of standard bootstrapped design)
-
 ### .NET how-tos
 #### Migrations
 EF Core migrations:
@@ -282,3 +269,22 @@ var role = new IdentityRole();
 MVC template with Individual User Accounts was used:
 
 `dotnet new mvc -au Individual`
+
+#### Add to property group (more than one app in IIS app pool)
+```
+<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+<AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>
+```
+
+### To do list
+#### Done
+* ~~Connect to SQL server using ASP.NET Core Secret Manager tool and SqlConnectionStringBuilder class~~
+* ~~Add authentication/authorization/Identity~~
+* ~~Add custom user data such as First Name, Last Name, Registration date to Identity model (https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0)~~
+* ~~Scaffold Identity (Register/Login) according to https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-5.0&tabs=netcore-cli#scaffold-identity-into-an-mvc-project-with-authorization~~
+* ~~Add all entities and migrate them~~
+
+#### Things that could have been done, but won't be done
+* Bundling/minification?
+* Adding Rent, Url, Address, Description, ApartmentSize types
+* CSS (instead of standard bootstrapped design)
