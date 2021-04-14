@@ -1,7 +1,7 @@
-# Simple housing queue system (bostadskö)
-## Goal
-The goal here is to develop a simple housing queue system. The end-users would be anyone trying to find an apartment in the city where the housing service is operating.
+# Simple Housing Queue System (bostadskösystem)
+I decided to develop a Simple Housing Queue MVC application with [ASP.NET Core](https://asp.net), Entity Framework and Microsoft SQL Server Web (64-bit) 15.0.4003.23.
 
+# Technical details
 ## Key concepts (entities)
 ### Rental object
 The object that can be rented (either an apartment or a parking spot).
@@ -35,12 +35,7 @@ Admins should be able to:
 * Admin: Terminating contracts
 * Admin: Invoice system
 
-## Implementation details
- Built with ASP .NET Core 5.0 (MVC pattern), Identity, Entity Framework and Microsoft SQL Server Web (64-bit) 15.0.4003.23.
-
-The following tables and columns will be used:
-
-### Schemas
+## Database schema
 * RentalObjects(RentalObjectID [PKEY], PropertyID [FKEY], Rent, RentalObjectType, Floor, FloorPlanUrl, ParkingSpotNumber, Rooms, Size)
 
 * Properties(PropertyID [PKEY], AreaID [FKEY], StreetAddress, Description, PropertyPhotoUrl)
