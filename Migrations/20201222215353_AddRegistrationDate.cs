@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Migrations
+namespace simple_housing_queue_system.Migrations
 {
     public partial class AddRegistrationDate : Migration
     {

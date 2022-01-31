@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using csharp_asp_net_core_mvc_housing_queue.Data;
+using simple_housing_queue_system.Data;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Migrations
+namespace simple_housing_queue_system.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20201222204645_InitialCreate")]
@@ -221,7 +221,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.Appartment", b =>
+            modelBuilder.Entity("simple_housing_queue_system.Models.Appartment", b =>
                 {
                     b.Property<int>("Appartment_id")
                         .ValueGeneratedOnAdd()

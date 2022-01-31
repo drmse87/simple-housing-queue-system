@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Manage
+namespace simple_housing_queue_system.Areas.Identity.Pages.Account.Manage
 {
     public static class ManageNavPages
     {

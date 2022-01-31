@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Data
+namespace simple_housing_queue_system.Data
 {
     public class ApplicationDbContext : IdentityDbContext<Models.ApplicationUser>
     {

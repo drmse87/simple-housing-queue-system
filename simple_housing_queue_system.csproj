@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>aspnet-csharp_asp_net_core_mvc_housing_queue-6073C305-BCA6-437A-BDA4-E475553BEC68</UserSecretsId>
-    <RootNamespace>csharp_asp_net_core_mvc_housing_queue</RootNamespace>
+    <UserSecretsId>aspnet-simple_housing_queue_system-6073C305-BCA6-437A-BDA4-E475553BEC68</UserSecretsId>
+    <RootNamespace>simple_housing_queue_system</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

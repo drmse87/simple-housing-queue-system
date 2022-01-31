@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using csharp_asp_net_core_mvc_housing_queue.Models;
+using simple_housing_queue_system.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Security.Claims;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Areas.Identity.Pages.Account.Manage
+namespace simple_housing_queue_system.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {

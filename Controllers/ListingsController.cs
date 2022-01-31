@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Principal;
 using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
-using csharp_asp_net_core_mvc_housing_queue.Models;
+using simple_housing_queue_system.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Controllers
+namespace simple_housing_queue_system.Controllers
 {
     public class ListingsController : Controller
     {

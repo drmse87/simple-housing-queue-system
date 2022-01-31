@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using csharp_asp_net_core_mvc_housing_queue.Data;
+using simple_housing_queue_system.Data;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Migrations
+namespace simple_housing_queue_system.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20201228233327_AllRemainingEntities")]
@@ -156,7 +156,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", b =>
+            modelBuilder.Entity("simple_housing_queue_system.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -224,7 +224,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("csharp_asp_net_core_mvc_housing_queue.Models.RentalObject", b =>
+            modelBuilder.Entity("simple_housing_queue_system.Models.RentalObject", b =>
                 {
                     b.Property<string>("RentalObjectID")
                         .ValueGeneratedOnAdd()
@@ -255,7 +255,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", null)
+                    b.HasOne("simple_housing_queue_system.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -264,7 +264,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", null)
+                    b.HasOne("simple_housing_queue_system.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -279,7 +279,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", null)
+                    b.HasOne("simple_housing_queue_system.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -288,7 +288,7 @@ namespace csharp_asp_net_core_mvc_housing_queue.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("csharp_asp_net_core_mvc_housing_queue.Models.ApplicationUser", null)
+                    b.HasOne("simple_housing_queue_system.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

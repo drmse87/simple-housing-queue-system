@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Models
+namespace simple_housing_queue_system.Models
 {   
     public class AdminListingViewModel
     {

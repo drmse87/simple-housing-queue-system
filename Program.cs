@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace csharp_asp_net_core_mvc_housing_queue
+namespace simple_housing_queue_system
 {
     public class Program
     {

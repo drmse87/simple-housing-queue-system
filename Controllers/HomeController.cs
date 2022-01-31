@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using csharp_asp_net_core_mvc_housing_queue.Models;
+using simple_housing_queue_system.Models;
 
-namespace csharp_asp_net_core_mvc_housing_queue.Controllers
+namespace simple_housing_queue_system.Controllers
 {
     public class HomeController : Controller
     {

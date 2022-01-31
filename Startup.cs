@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
-using csharp_asp_net_core_mvc_housing_queue.Data;
+using simple_housing_queue_system.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Data.SqlClient;
 
-namespace csharp_asp_net_core_mvc_housing_queue
+namespace simple_housing_queue_system
 {
     public class Startup
     {       
